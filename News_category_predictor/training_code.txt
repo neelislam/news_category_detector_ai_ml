@@ -1,0 +1,43 @@
+# news_classifier.py
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.pipeline import make_pipeline
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
+# 1. Load Dataset
+df = pd.read_csv("news_raw.csv")   # CSV ফাইল একই ফোল্ডারে রাখতে হবে
+print("Total samples:", len(df))
+
+# 2. Train-test split
+X_train, X_test, y_train, y_test = train_test_split(
+    df["text"], df["category"], test_size=0.2, random_state=42
+)
+
+# 3. Pipeline (TF-IDF + Naive Bayes Classifier)
+model = make_pipeline(TfidfVectorizer(), MultinomialNB())
+
+# 4. Train the model
+model.fit(X_train, y_train)
+
+# 5. Evaluate
+y_pred = model.predict(X_test)
+print("✅ Accuracy:", accuracy_score(y_test, y_pred))
+print("\n📊 Classification Report:\n", classification_report(y_test, y_pred))
+print("\n🔎 Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
+
+# 6. Try with sample input
+sample_text = "বাংলাদেশ ক্রিকেট দল দুর্দান্ত পারফরম্যান্স করেছে।"
+pred = model.predict([sample_text])
+print(f"\n🔮 Sample Prediction: '{sample_text}' → {pred[0]}")
+
+# 7. Save model (optional, for reuse later)
+import joblib
+joblib.dump(model, "news_classifier_model.pkl")
+print("\n💾 Model saved as news_classifier_model.pkl")
+
+
+#python news_classifier.py
+#python app.py

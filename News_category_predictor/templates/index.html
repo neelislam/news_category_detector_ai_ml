@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>News Classifier</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        textarea {
+            width: 500px;
+            height: 120px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 8px 15px;
+            font-size: 16px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: #f9f9f9;
+        }
+        .accuracy {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>📰 News Classifier</h1>
+
+    <form method="post" action="/">
+        <textarea name="news_text" placeholder="Enter news text...">{{ text_input }}</textarea><br><br>
+        <button type="submit">Classify</button>
+    </form>
+
+    {% if prediction %}
+        <div class="result">
+            <h2>Prediction: {{ prediction }}</h2>
+            {% if confidence %}
+                <p><b>Confidence:</b> {{ confidence }}%</p>
+            {% endif %}
+            <p><b>Your text:</b> {{ text_input }}</p>
+        </div>
+    {% endif %}
+
+    {% if accuracy %}
+        <div class="accuracy">
+            <p>🤖 Model Accuracy: {{ accuracy }}%</p>
+        </div>
+    {% endif %}
+</body>
+</html>
